@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+</head>
+<body>
+    <nav>nav</nav>
+    <header class= "bg-dark text-light">
+        <div class ="container"> <!--grid  bootstrap쓸꺼야-->
+            <div class ="row">  <!--반응형이될거야-->
+               <div class= "col text-center p-5">
+                   <h1>Explor</h1>   <!-- h1안에 explor라는 택스트를 넣어라 -->
+                   <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. 
+                       Tempore cupiditate saepe facere est possimus asperiores dolorem rem sint perferendis 
+                       provident.</p>
+                       <button class="btn btn-outline-primary">Button</button> <!--
+                        button.btn.btn-primary{Button}  -- 버튼을 만들건데 btn class 안에 button이라는 텍스트로 버튼생성-->
+               </div>
+            </div>
+        </div>
+    </header>
+    <section class="bg-light p-5">
+        <div class="container">
+            <div class="row">   <!--row는 한개, 행은 2개 생성-->
+                    <div class="col-lg-4 text-light text-center">
+                            <canvas width="300" height="300" id="myLineChart"></canvas>
+                        </div>
+                <div class="col-lg-8 align-self-center" >
+                    <h3>Explore & Connect</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit iure ducimus necessitatibus eos debitis explicabo eaque omnis commodi molestias quia, maiores voluptatum est modi. Esse dolores deserunt enim possimus dolor.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section><div class="container">
+        <div class="row">
+            <ul class="col list-group">
+
+            </ul>  <!--부모와 자식-->
+
+        </div>
+    </div>
+</section>
+<section class="bg-ligt text-muted pt-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2 bg-info text-light">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus temporibus inventore sapiente sint amet reiciendis placeat illo aliquid quisquam fuga obcaecati cum ullam explicabo eius nisi, repellat iure magni quo.</p>
+            </div>
+            <div class="col-md-4 bg-warning text-light">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus temporibus inventore sapiente sint amet reiciendis placeat illo aliquid quisquam fuga obcaecati cum ullam explicabo eius nisi, repellat iure magni quo.</p>
+            </div>
+            <div class="col-md-4 bg-success text-light">
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officiis, libero ut ex nemo dignissimos odio! Ducimus, quibusdam. Necessitatibus dolorem quas nisi praesentium aliquam distinctio, libero, beatae dignissimos possimus pariatur velit.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-6 align-self-center">
+            <h3>Explore & Connect</h3>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Data">
+                    <button class="input-group-append btn btn-primary">register</button>
+                </div>
+            </div>
+            <div class="col-6text-center pt-5">
+                <img src= "https://dummyimage.com/400x300"></img>
+            </div>
+        </div>
+    </div>
+</section>
+    <footer>footer</footer>
+    <script  src="https://code.jquery.com/jquery-3.4.1.min.js"
+             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+             crossorigin="anonymous"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+        <script>
+        getData('/sensor/led01/values/1', {}, function(data){
+            console.log('data', parseData(data));
+            
+            drawlist(parseData(data))
+
+            drawLineChart(parseData(data))
+        });
+
+            function getData(uri, data, fun) {
+                $.ajax({
+                    url: 'http://127.0.0.1:5000' + uri,
+                    method: "GET",
+                    data: JSON.stringify(data),
+                    dataType : "json",
+                    contentType: "application/json"
+                }).done(function(returnData) {
+                    if(fun) {
+                        fun(returnData);
+                    }
+                }).fail(function() {
+                    console.log("fail getData");
+                    if(fun) {
+                        fun();
+                    }
+                }).always(function() {
+
+                });
+            };
+
+            function parseData(serverData){
+                var datalist = [];
+                for(var data of serverData.values){
+                    datalist.push(data.value)
+                }
+                return datalist;
+            };
+
+            function drawlist(chartData){
+                var list = document.querySelector('.list-group');
+                while(list.firstChild){
+                    list.removeChild(list.firstChild);
+                }
+                for(var item of chartData){
+                    $(list).append(`<li class = "list-group-item">${item}</li>`);
+                    //$(list).append('<li class="list-group-item">'+ item + '</li>');
+                }
+            };
+
+            function drawLineChart(chartData){
+                var lineCanvas = document.querySelector('#myLineChart');
+                new Chart(lineCanvas, {
+                    type : 'line',
+                    data : {
+                        labels : chartData,
+                        datasets : [{
+                            data : chartData,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)'
+                        }]
+                    }
+                });
+            }
+        </script>
+
+</body>
+</html>
