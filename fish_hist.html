@@ -71,6 +71,9 @@
             width: 30px;
             height: 30px;
         }
+        .list-group-item {
+            font-size : 5px;
+        }
     </style>
   </head>
 
@@ -99,5 +102,58 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+    <script  
+        src="https://code.jquery.com/jquery-3.4.1.min.js"  
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="  
+        crossorigin="anonymous"></script>
+    <script>
+        getData('/fish/history/1/getData/values/1', {}, function(data) {
+            console.log('server data', data);
+            console.log('data', parseData(data));
+            drawList(parseData(data));
+        });
+
+        function getData(uri, data, fun) {
+            $.ajax({
+                url: 'http://127.0.0.1:5000' + uri,
+                method: "GET",
+                data: JSON.stringify(data),
+                dataType : "json",
+                contentType: "application/json"
+            }).done(function(returnData) {
+                if(fun) {
+                    fun(returnData);
+                }
+            }).fail(function() {
+                console.log("fail getData");
+                if(fun) {
+                    fun();
+                }
+            }).always(function() {
+
+            });
+        };
+
+        function parseData(serverData) {
+            var dataList = [];
+            for (var data of serverData.values) {
+                dataList.push(data.date)
+            }
+            return dataList;
+        }
+
+        function drawList(charData) {
+            var list = document.querySelector('.list-group');
+            while(list.firstChild) {
+                list.removeChild(list.firstChild);
+            }
+            for (var item of charData) {
+                $(list).append(`<li class="list-group-item"><image src = "https://github.com/jinhun7688/smart_farm/blob/master/fish.png?raw=true", class = "list_img"></image>${item}</li>`);
+                //$(list).append('<li class="list-group-item">' + item + '</li>');
+            }
+        }
+
+    </script>
   </body>
 </html>
