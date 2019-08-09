@@ -233,6 +233,7 @@
                 contentType: "application/json"
             }).done(function(){
                 alert("Feeding!!")
+                location.href("http://127.0.0.1:5000/main/feeding");
             }).fail(function(){
                 console.log("Fail")
             });
@@ -272,6 +273,7 @@
             }).done(function(){
                 $('#led_on_off_bt').attr("src", cur_src);
                 alert("LED " + status);
+                location.href("http://127.0.0.1:5000/main/led");
             }).fail(function(){
                 console.log("Fail")
             });
