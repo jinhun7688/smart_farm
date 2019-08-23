@@ -185,7 +185,7 @@
     </div>
     <!--온도/습도 값--> 
     <div  style='line-height:250% ' >
-            <p class="temp" style="color:#404040" text-align: right;>24°C|90%</p>
+            <p class="temp" id = "temp_button" style="color:#404040" text-align: right;>24°C|90%</p>
     </div>
     <nav>
         <ul>
@@ -203,12 +203,12 @@
             <img src="https://github.com/aneunjin/git_test/blob/master/text_box.png?raw=tru" class="text_box2"> 
             <img src="https://github.com/aneunjin/git_test/blob/master/text_box.png?raw=tru" class="text_box3"> 
             <!--물고기 밥 버튼-->  
-            <button id = 'feed_button' onclick="location.href='http://naver.com'"><img src="https://github.com/aneunjin/git_test/blob/master/fish2.png?raw=true" class="fish" ></button>
+            <img src="https://github.com/aneunjin/git_test/blob/master/fish2.png?raw=true" class="fish" id = 'feed_button' onclick="location.href='/main/feeding', alert('물고기 밥을 주었습니다.') ">
             <!--네비게이션 바 왼쪽부터 물고기기록| 수온조절 기록| led기록| 식물 기록-->
-            <button onclick="location.href='http://127.0.0.1:5000/fish/history'"><img src="https://github.com/aneunjin/git_test/blob/master/fish_his.png?raw=true" class="fish_his"></button>
-            <button onclick="location.href='http://naver.com'"><img src="https://github.com/aneunjin/git_test/blob/master/water_his.png?raw=true" class="water_his"></button>
-            <button onclick="location.href='http://127.0.0.1:5000/LED/history'"><img src="https://github.com/aneunjin/git_test/blob/master/led_his.png?raw=true" class="led_his"></a>
-            <button onclick="location.href='http://google.co.kr'"><img src="https://github.com/aneunjin/git_test/blob/master/plant_his.png?raw=true" class="plant_his"></a>
+            <img src="https://github.com/aneunjin/git_test/blob/master/fish_his.png?raw=true" class="fish_his" onclick="location.href='/fish/history'">
+            <img src="https://github.com/aneunjin/git_test/blob/master/water_his.png?raw=true" class="water_his" onclick="location.href='http://naver.com'">
+            <img src="https://github.com/aneunjin/git_test/blob/master/led_his.png?raw=true" class="led_his" onclick="location.href='/LED/history'">
+            <img src="https://github.com/aneunjin/git_test/blob/master/plant_his.png?raw=true" class="plant_his" onclick="location.href='http://google.co.kr'">
         </ul>
     </nav>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -217,6 +217,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
     <script>
+        /*
+        function getData(uri, data, fun) {
+            $.ajax({
+                url: uri,
+                method: "GET",
+                data: JSON.stringify(data),
+                dataType : "json",
+                contentType: "application/json"
+            }).done(function(returnData) {
+                if(fun) {
+                    fun(returnData);
+                }
+            }).fail(function() {
+                console.log("fail getData");
+                if(fun) {
+                    fun();
+                }
+            }).always(function() {
+
+            });
+        }
+
+        $('#temp_button').click(
+            location.href = '/main/temp',
+            getData('/main/temp/1/getData/values/1', {}, function(data) {
+            console.log('server data', data);
+            //console.log('data', parseData(data));
+            })
+        );*/
+
         $('#feed_button').click(function ()
         {
             uri = "/POST/sensor";
@@ -226,18 +256,20 @@
                 "value" : "FEED" 
             };
             $.ajax({
-                url : 'http://127.0.0.1:5000' + uri,
+                url : uri,
                 method : 'POST',
                 data: JSON.stringify(postData),
                 dataType: 'json',
                 contentType: "application/json"
             }).done(function(){
                 alert("Feeding!!")
-                location.href("http://127.0.0.1:5000/main/feeding");
+                location.href("/main/feeding");
             }).fail(function(){
                 console.log("Fail")
             });
         });
+
+        
 
         $('led_bt').click(
 
